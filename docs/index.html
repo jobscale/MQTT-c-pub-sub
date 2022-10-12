@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>MQTT Over WebSocket</title>
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <style>
+    .container textarea {
+      font-size: 1.6vmin;
+      width: 90vmin;
+      height: 90vmin;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <textarea readonly="readonly"></textarea>
+  </div>
+<script>
+const logger = console;
+const client = mqtt.connect('ws://127.0.0.1:8883');
+const topic = "hello/world"
+const sensor = 'sensor1';
+const state = {
+  count: 0,
+};
+
+client.subscribe(topic);
+
+const pubLoop = setInterval(() => {
+  const time = new Date().toISOString();
+  const temp = Math.floor(Math.random() * 3000) / 100;
+  state.count++;
+  const metric = JSON.stringify({
+    count: state.count,
+    time,
+    sensor,
+    temp,
+  });
+  client.publish(topic, metric);
+}, 1000);
+
+setTimeout(() => {
+  clearInterval(pubLoop);
+}, 10000);
+
+client.on('message', (topic, message) => {
+  const payload = message.toString();
+  logger.info({ payload });
+  document.querySelector('.container textarea')
+  .textContent += `${payload}\n`;
+});
+</script>
+</body>
+</html>

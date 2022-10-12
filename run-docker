@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+d_run() {
+  docker build . -t mqtt-websocket:local
+  docker run --rm --name mqtt-websocket \
+  --network vnet \
+  -v $PWD:/home/node/app \
+  -p 3000:3000 \
+  -p 1883:1883 \
+  -p 8883:8883 \
+  -it mqtt-websocket:local
+}
+
+d_rm() {
+  docker rm -f mqtt-websocket
+}
+
+{
+  echo "Usage:"
+  grep ^[a-z] run-docker | awk -F'(' '{print "  "$1}'
+}
