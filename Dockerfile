@@ -9,5 +9,5 @@ RUN npm i --omit=dev
 COPY --chown=node:staff docs docs
 EXPOSE 3000
 EXPOSE 1883
-EXPOSE 8883
+EXPOSE 12470
 CMD ["/docker-entry.sh"]
