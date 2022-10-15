@@ -18,7 +18,7 @@
   </div>
 <script>
 const logger = console;
-const client = mqtt.connect(`ws://${location.hostname}:8883`);
+const client = mqtt.connect(`wss://${location.hostname}`);
 const topic = "hello/world"
 const sensor = 'sensor1';
 const state = {
