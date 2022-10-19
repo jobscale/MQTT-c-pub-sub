@@ -2,54 +2,26 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>MQTT Over WebSocket</title>
+  <link rel="stylesheet" href="css/style.css" />
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-  <style>
-    .container textarea {
-      font-size: 1.6vmin;
-      width: 90vmin;
-      height: 90vmin;
-    }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <!---
+  <script src="https://unpkg.com/vue"></script>
+  -->
+  <title>MQTT Over WebSocket</title>
 </head>
 <body>
-  <div class="container">
-    <textarea readonly="readonly"></textarea>
+  <div id="app">
+    <div class="content">
+      <textarea readonly="readonly">{{
+        chats.map(chat => `${chat.id} ${chat.time} ${chat.topic}\n ${chat.message}`).join('\n')
+      }}</textarea>
+      <form @submit.prevent="onSubmit">
+        <input type="text" v-model="input" class="text-input">
+        <input type="submit">
+      </form>
+    </div>
   </div>
-<script>
-const logger = console;
-const client = mqtt.connect(`wss://${location.hostname}/mqtt`);
-const topic = "hello/world"
-const sensor = 'sensor1';
-const state = {
-  count: 0,
-};
-
-client.subscribe(topic);
-
-const pubLoop = setInterval(() => {
-  const time = new Date().toISOString();
-  const temp = Math.floor(Math.random() * 3000) / 100;
-  state.count++;
-  const metric = JSON.stringify({
-    count: state.count,
-    time,
-    sensor,
-    temp,
-  });
-  client.publish(topic, metric);
-}, 1000);
-
-setTimeout(() => {
-  clearInterval(pubLoop);
-}, 10000);
-
-client.on('message', (topic, message) => {
-  const payload = message.toString();
-  logger.info({ payload });
-  document.querySelector('.container textarea')
-  .textContent += `${payload}\n`;
-});
-</script>
+  <script defer src="js/index.js"></script>
 </body>
 </html>
