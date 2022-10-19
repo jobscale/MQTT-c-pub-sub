@@ -1,5 +1,7 @@
 const logger = console;
-const client = mqtt.connect(`wss://${document.location.hostname.hostname}/mqtt`);
+const protocol = document.location.protocol === 'https:' ? 'wss' : 'ws';
+const { hostname } = document.location;
+const client = mqtt.connect(`${protocol}://${hostname}/mqtt`);
 const state = {
   count: 0,
 };
