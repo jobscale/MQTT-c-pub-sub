@@ -1,8 +1,10 @@
 FROM ghcr.io/jobscale/node-aws
-WORKDIR /home/node
-RUN sudo apt update && sudo apt install -y mosquitto
-RUN sudo mkdir /run/mosquitto
+USER root
+RUN apt-get update && apt-get install -y mosquitto
 COPY listen.conf /etc/mosquitto/conf.d/listen.conf
+
+WORKDIR /home/node
+USER node
 COPY --chown=node:staff docker-entry.sh /
 COPY --chown=node:staff package.json .
 RUN npm i --omit=dev
