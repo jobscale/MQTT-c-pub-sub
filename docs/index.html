@@ -4,10 +4,8 @@
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/style.css" />
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
-  <!---
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
   <script src="https://unpkg.com/vue"></script>
-  -->
   <title>MQTT Over WebSocket</title>
 </head>
 <body>
@@ -19,8 +17,10 @@
       <form @submit.prevent="onSubmit">
         <input type="text" v-model="input" class="text-input">
         <input type="submit">
+        <button @click="onCopyLink" :title="clientId" class="btn-link">Copy<br>URL</button>
       </form>
     </div>
+    <div ref="full-screen" class="full-screen">{{ message }}</div>
   </div>
   <script defer src="js/index.js"></script>
 </body>
