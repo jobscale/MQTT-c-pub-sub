@@ -17,7 +17,7 @@
       <form @submit.prevent="onSubmit">
         <input type="text" v-model="input" class="text-input">
         <input type="submit">
-        <button @click="onCopyLink" :title="clientId" class="btn-link">Copy<br>URL</button>
+        <button @click.prevent="onCopyLink" :title="clientId" class="btn-link">Copy<br>URL</button>
       </form>
     </div>
     <div ref="full-screen" class="full-screen">{{ message }}</div>

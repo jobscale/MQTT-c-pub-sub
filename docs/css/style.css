@@ -54,8 +54,10 @@ form > * {
 }
 
 .btn-link {
-  padding: 0.5em;
-  border-radius: 0.4em;
+  padding: 0.5em 1.5em;
+  border-radius: 0.7em;
+  background-color: #66f;
+  margin-left:1em;
 }
 
 .full-screen {
