@@ -3,23 +3,28 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/style.css" />
-  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <!-- <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
   <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
-  <script src="https://unpkg.com/vue"></script>
+  <!-- <script src="https://unpkg.com/vue"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.37/vue.global.prod.min.js"></script>
   <title>MQTT Over WebSocket</title>
 </head>
 <body>
   <div id="app">
-    <div class="content">
-      <textarea ref="timeline" readonly="readonly">{{
-        chats.map(chat => `${chat.id} ${chat.time} ${chat.topic}\n ${chat.message}`).join('\n')
-      }}</textarea>
-      <form @submit.prevent="onSubmit">
-        <input type="text" v-model="input" class="text-input">
-        <input type="submit">
-        <button @click.prevent="onCopyLink" :title="clientId" class="btn-link">Copy<br>URL</button>
-      </form>
-    </div>
+    <article class="area-background quiet-2" role="img"></article>
+    <section>
+      <div class="content">
+        <textarea ref="timeline" readonly="readonly">{{
+          chats.map(chat => `${chat.id} ${chat.time} ${chat.topic}\n ${chat.message}`).join('\n')
+        }}</textarea>
+        <form @submit.prevent="onSubmit">
+          <input type="text" v-model="input" class="text-input">
+          <input type="submit">
+          <button @click.prevent="onCopyLink" :title="clientId" class="btn-link">Copy<br>URL</button>
+        </form>
+      </div>
+    </section>
     <div ref="full-screen" class="full-screen">{{ message }}</div>
   </div>
   <script defer src="js/index.js"></script>
