@@ -1,4 +1,11 @@
-sudo apt update
-sudo apt install -y cmake make gcc
-cmake .
-make
+#!/usr/bin/env bash
+set -wu
+
+{
+  sudo apt update
+  sudo apt install -y cmake make g++
+  mkdir build
+  cd build
+  cmake ..
+  make
+}
