@@ -36,6 +36,7 @@ Vue.createApp({
           ...JSON.parse(payload),
           topic,
         });
+        this.scroll();
       });
     },
 
@@ -46,6 +47,11 @@ Vue.createApp({
         time: new Date().toISOString(),
         id: ++this.count,
       }));
+    },
+
+    scroll() {
+      const { timeline } = this.$refs;
+      setTimeout(() => { timeline.scrollTop = timeline.clientHeight; }, 200);
     },
 
     onSubmit() {
