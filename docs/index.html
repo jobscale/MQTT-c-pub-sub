@@ -11,11 +11,11 @@
 <body>
   <div id="app">
     <div class="content">
-      <textarea readonly="readonly">{{
+      <textarea ref="timeline" readonly="readonly">{{
         chats.map(chat => `${chat.id} ${chat.time} ${chat.topic}\n ${chat.message}`).join('\n')
       }}</textarea>
       <form @submit.prevent="onSubmit">
-        <input ref="timeline" type="text" v-model="input" class="text-input">
+        <input type="text" v-model="input" class="text-input">
         <input type="submit">
         <button @click.prevent="onCopyLink" :title="clientId" class="btn-link">Copy<br>URL</button>
       </form>
