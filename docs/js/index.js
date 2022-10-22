@@ -51,7 +51,11 @@ Vue.createApp({
 
     scroll() {
       const { timeline } = this.$refs;
-      setTimeout(() => { timeline.scrollTop = timeline.clientHeight; }, 200);
+      setTimeout(() => timeline.scroll({
+        top: timeline.scrollHeight,
+        left: 0,
+        behavior: 'smooth',
+      }), 100);
     },
 
     onSubmit() {
