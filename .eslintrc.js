@@ -6,6 +6,7 @@ module.exports = {
   globals: {
     Vue: 'readonly',
     mqtt: 'readonly',
+    dayjs: 'readonly',
   },
   rules: {
     indent: ['error', 2, { MemberExpression: 0 }],

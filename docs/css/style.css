@@ -27,6 +27,7 @@ body {
   font-size: 1.6vmin;
   width: 92vmin;
   height: 80vmin;
+  border: 0;
 }
 
 .content input {
@@ -35,22 +36,14 @@ body {
 
 .content .text-input {
   width: 30em;
-  border: 0.5em solid #222;
+  border: 0;
 }
 
-.select, .select:focus {
-  width: 25em;
-  border: 1px solid #ccc;
-  background: #ddd solid 1px;
-}
-
-form {
+form, .group {
+  width: 100%;
   padding: 0.5em;
   display: flex;
-}
-
-form > * {
-  margin: 0.1em;
+  justify-content: space-between;
 }
 
 .btn-link {
