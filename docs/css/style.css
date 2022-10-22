@@ -17,6 +17,10 @@ body {
   justify-content: center;
 }
 
+h1 {
+  font-size: 2em;
+}
+
 .content {
   display: flex;
   align-items: center;
@@ -32,18 +36,24 @@ body {
 
 .content input {
   font-size: 1.5em;
+  border: 0;
+  padding: 0.5em;
 }
 
 .content .text-input {
-  width: 30em;
-  border: 0;
+  width: 28em;
 }
 
-form, .group {
+.content .client-id {
+  width: 12em;
+}
+
+.group {
   width: 100%;
   padding: 0.5em;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .btn-link {

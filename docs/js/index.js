@@ -9,25 +9,23 @@ Vue.createApp({
     const userId = this.random();
     return {
       ts: dayjs().format('YYYY-MM-DD hh:mm:ss'),
-      dayjs,
       clientId,
       userId,
       chats: [],
       input: '',
       count: 0,
-      message: 'Now Loading ...',
+      message: '',
     };
   },
 
   created() {
     this.subscribe();
-    setInterval(() => {
-      this.ts = dayjs().format('YYYY-MM-DD hh:mm:ss');
-    }, 1000);
+    const format = 'YYYY-MM-DD hh:mm:ss';
+    setInterval(() => { this.ts = dayjs().format(format); }, 1000);
   },
 
   mounted() {
-    this.showScreen('', 1500);
+    this.showScreen('Now Loading ...', 1500);
     this.publish({
       message: `[${this.userId}] joined.`,
     });

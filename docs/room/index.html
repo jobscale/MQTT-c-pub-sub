@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="/css/style.css" />
   <!-- <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script> -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
   <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
@@ -17,24 +17,19 @@
     <section>
       <div class="content">
         <div class="group">
-          <div>ClientId: {{ clientId }}</div>
-          <div>UserId: {{ userId }}</div>
-          <a href="room">
-            <button class="btn-link">Create a new Room</button>
-          </a>
-          <div>{{ ts }}</div>
+          <div>
+            <h1>Create a new Room</h1>
+          </div>
         </div>
-        <textarea ref="timeline" readonly="readonly">{{ render(chats) }}</textarea>
         <form @submit.prevent="onSubmit" class="group">
-          <dig></dig>
-          <input type="text" v-model="input" class="text-input">
+          <button @click.prevent="onNewRoom" :title="clientId" class="btn-link">New<br>Room</button>
+          <input type="text" v-model="clientId" class="client-id" readonly="true">
           <input type="submit">
-          <button @click.prevent="onCopyLink" :title="clientId" class="btn-link">Copy<br>URL</button>
         </form>
       </div>
     </section>
     <div ref="full-screen" class="full-screen">{{ message }}</div>
   </div>
-  <script defer src="js/index.js"></script>
+  <script defer src="/js/room.js"></script>
 </body>
 </html>
