@@ -24,7 +24,14 @@
           </a>
           <div>{{ ts }}</div>
         </div>
-        <textarea ref="timeline" readonly="readonly">{{ render(chats) }}</textarea>
+        <div ref="timeline" class="chat-area">
+          <div v-for="chat of chats" :class="chat.userId === userId ? 'with-me' : 'with-you'">
+            <div>{{ timestamp(chat.time) }}</div>
+            <div class="chat-text">{{ chat.message }}</div>
+            <br v-if="chat.dialog">
+            <div v-for="item of chat.dialog" class="selection" @click="onSpeak(item)">{{ item.value || item.speak }}</div>
+          </div>
+        </div>
         <form @submit.prevent="onSubmit" class="group">
           <dig></dig>
           <input type="text" v-model="input" class="text-input">

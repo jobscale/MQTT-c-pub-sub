@@ -5,7 +5,11 @@ const client = mqtt.connect(broker);
 Vue.createApp({
   data() {
     const qs = new URLSearchParams(document.location.search);
-    const clientId = decodeURI(qs.get('r') || this.random());
+    const room = qs.get('r');
+    const clientId = room && decodeURI(room);
+    if (!clientId) {
+      document.location.href = `${document.location.origin}?r=${this.random()}`;
+    }
     const userId = this.random();
     return {
       ts: dayjs().format('YYYY-MM-DD hh:mm:ss'),
@@ -93,16 +97,8 @@ Vue.createApp({
       if (delay) setTimeout(() => { style.display = 'none'; }, 1500);
     },
 
-    username(userId) {
-      return userId === this.userId ? 'You' : userId;
-    },
-
-    render(chats) {
-      return chats.map(chat => {
-        const ts = dayjs(chat.time).format('hh:mm:ss');
-        const author = this.username(chat.userId);
-        return `${chat.id} (${ts}) ${author}\n ${chat.message}`;
-      }).join('\n');
+    timestamp(time) {
+      return dayjs(time).format('hh:mm:ss');
     },
 
     random() {
