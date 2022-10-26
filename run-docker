@@ -6,5 +6,6 @@ set -eu
   && docker run --rm --name mqtt-websocket \
   --network vnet \
   -p 3000:3000 \
+  -v $PWD/docs:/home/node/docs \
   -it mqtt-websocket:local
 }

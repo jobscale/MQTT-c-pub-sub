@@ -21,10 +21,10 @@
             <h1>Create a new Room</h1>
           </div>
         </div>
-        <form @submit.prevent="onSubmit" class="group">
-          <button @click.prevent="onNewRoom" :title="clientId" class="btn-link">New<br>Room</button>
+        <form @submit.prevent="onSubmit" class="form">
           <input type="text" v-model="clientId" class="client-id" readonly="true">
-          <input type="submit">
+          <input type="submit" ref="submit" value="Create">
+          <button @click.prevent="onNewRoom" :title="clientId" class="btn-link">New<br>Room</button>
         </form>
       </div>
     </section>

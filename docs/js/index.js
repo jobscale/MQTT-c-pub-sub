@@ -1,4 +1,3 @@
-const logger = console;
 const broker = 'wss://mqtt.jsx.jp/mqtt';
 const client = mqtt.connect(broker);
 
@@ -35,6 +34,7 @@ Vue.createApp({
     this.publish({
       message: `${this.name} joined in room.`,
     });
+    this.$refs.input.focus();
   },
 
   methods: {
@@ -44,11 +44,14 @@ Vue.createApp({
       client.on('message', (...argv) => this.onMessage(...argv));
     },
 
-    onMessage(topic, message) {
-      const payload = message.toString();
-      logger.info({ payload, topic });
+    onMessage(topic, data) {
+      const payload = JSON.parse(data.toString());
+      const httpRegexG = /(https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*))/g;
+      const plaintext = payload.message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      const message = plaintext.replace(httpRegexG, '<a target="_blank" href="$1">$1</a>');
       this.chats.push({
-        ...JSON.parse(payload),
+        ...payload,
+        message,
         topic,
       });
       this.scroll();
@@ -76,13 +79,20 @@ Vue.createApp({
     },
 
     onSubmit() {
+      this.$refs.input.focus();
+      if (!this.input) return;
       this.publish({
         message: this.input,
       });
       this.input = '';
     },
 
+    onCreateRoom() {
+      document.location.href = '/room';
+    },
+
     onCopyLink() {
+      this.$refs.input.focus();
       const { origin } = document.location;
       const url = `${origin}?r=${encodeURIComponent(this.clientId)}`;
       window.navigator.clipboard.writeText(url)

@@ -22,21 +22,21 @@
             Name:
             <input v-model="name" class="name">
           </label>
-          <button class="btn-link">Create a new Room</button>
+          <button class="btn-link" @click="onCreateRoom">Create a new Room</button>
           <div>{{ ts }}</div>
         </div>
         <div ref="timeline" class="chat-area">
           <div v-for="chat of chats" :class="chat.userId === userId ? 'with-me' : 'with-you'">
             <div :title="chat.clientId">{{ username(chat) }} &nbsp; {{ timestamp(chat.time) }}</div>
-            <div class="chat-text">{{ chat.message }}</div>
+            <div class="chat-text" v-html="chat.message"></div>
             <br v-if="chat.dialog">
             <div v-for="item of chat.dialog" class="selection" @click="onSpeak(item)">{{ item.value || item.speak }}</div>
           </div>
         </div>
         <form @submit.prevent="onSubmit" class="form">
           <dig></dig>
-          <input type="text" v-model="input" class="text-input">
-          <input type="submit">
+          <input type="text" ref="input" v-model="input" class="text-input">
+          <input type="submit" value="Send">
           <button @click.prevent="onCopyLink" :title="clientId" class="btn-link">Copy<br>URL</button>
         </form>
       </div>

@@ -9,6 +9,7 @@ Vue.createApp({
   mounted() {
     this.showScreen('', 1500);
     this.onNewRoom();
+    this.$refs.submit.focus();
   },
 
   methods: {
@@ -17,6 +18,7 @@ Vue.createApp({
     },
 
     onNewRoom() {
+      this.$refs.submit.focus();
       this.clientId = '(Now Loading ...)';
       setTimeout(() => { this.clientId = this.random(); }, 1000);
     },

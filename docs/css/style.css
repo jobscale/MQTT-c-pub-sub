@@ -50,6 +50,11 @@ h1 {
   padding: 0.5em;
 }
 
+.chat-text a {
+  text-decoration: none;
+  color: #00c;
+}
+
 .with-me .chat-text {
   border-radius: 1em 1em 0 1em;
   background-color: #afa;
@@ -78,6 +83,10 @@ input {
   border: none;
 }
 
+input[type="submit"] {
+  cursor: pointer;
+}
+
 .name {
   width: 8em;
 }
@@ -100,6 +109,7 @@ input {
 }
 
 .btn-link {
+  cursor: pointer;
   padding: 0.5em 1.5em;
   border-radius: 0.7em;
   background-color: #66f;
