@@ -71,24 +71,27 @@ h1 {
   cursor: pointer;
 }
 
-.content input {
-  font-size: 1.5em;
-  border: 0;
+input {
   padding: 0.5em;
-  border-radius: 0.5em;
   background: transparent;
+  border-radius: 0.5em;
+  border: none;
+}
+
+.name {
+  width: 8em;
+}
+
+.form input {
+  font-size: 1.5em;
   border: 1px solid #888;
 }
 
-.content .text-input {
+.form .text-input {
   width: 28em;
 }
 
-.content .client-id {
-  width: 12em;
-}
-
-.group {
+.form, .group {
   width: 100%;
   padding: 0.5em;
   display: flex;

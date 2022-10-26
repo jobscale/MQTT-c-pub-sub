@@ -11,10 +11,12 @@ Vue.createApp({
       document.location.href = `${document.location.origin}?r=${this.random()}`;
     }
     const userId = this.random();
+    const name = sessionStorage.getItem('name') || 'anonymous';
     return {
       ts: dayjs().format('YYYY-MM-DD hh:mm:ss'),
       clientId,
       userId,
+      name,
       chats: [],
       input: '',
       count: 0,
@@ -31,7 +33,7 @@ Vue.createApp({
   mounted() {
     this.showScreen('Now Loading ...', 1500);
     this.publish({
-      message: `[${this.userId}] joined.`,
+      message: `${this.name} joined in room.`,
     });
   },
 
@@ -58,8 +60,10 @@ Vue.createApp({
         ...payload,
         time: new Date().toISOString(),
         userId: this.userId,
+        name: this.name,
         id: ++this.count,
       }));
+      sessionStorage.setItem('name', this.name);
     },
 
     scroll() {
@@ -99,6 +103,11 @@ Vue.createApp({
 
     timestamp(time) {
       return dayjs(time).format('hh:mm:ss');
+    },
+
+    username(chat) {
+      if (chat.userId === this.userId) return 'You';
+      return chat.name;
     },
 
     random() {

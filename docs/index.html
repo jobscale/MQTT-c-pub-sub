@@ -18,21 +18,22 @@
       <div class="content">
         <div class="group">
           <div>ClientId: {{ clientId }}</div>
-          <div>UserId: {{ userId }}</div>
-          <a href="room">
-            <button class="btn-link">Create a new Room</button>
-          </a>
+          <label>
+            Name:
+            <input v-model="name" class="name">
+          </label>
+          <button class="btn-link">Create a new Room</button>
           <div>{{ ts }}</div>
         </div>
         <div ref="timeline" class="chat-area">
           <div v-for="chat of chats" :class="chat.userId === userId ? 'with-me' : 'with-you'">
-            <div>{{ timestamp(chat.time) }}</div>
+            <div :title="chat.clientId">{{ username(chat) }} &nbsp; {{ timestamp(chat.time) }}</div>
             <div class="chat-text">{{ chat.message }}</div>
             <br v-if="chat.dialog">
             <div v-for="item of chat.dialog" class="selection" @click="onSpeak(item)">{{ item.value || item.speak }}</div>
           </div>
         </div>
-        <form @submit.prevent="onSubmit" class="group">
+        <form @submit.prevent="onSubmit" class="form">
           <dig></dig>
           <input type="text" v-model="input" class="text-input">
           <input type="submit">
