@@ -1,6 +1,7 @@
-FROM ghcr.io/jobscale/node-aws
+FROM node:lts-bullseye
 USER root
 RUN apt-get update && apt-get install -y mosquitto mosquitto-clients
+RUN rm -fr /var/lib/apt/lists/*
 
 COPY listen.conf /etc/mosquitto/conf.d/listen.conf
 WORKDIR /etc/mosquitto/certs
