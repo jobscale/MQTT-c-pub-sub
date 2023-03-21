@@ -83,8 +83,23 @@ input {
   border: none;
 }
 
-input[type="submit"] {
+button:enabled {
   cursor: pointer;
+}
+
+button.fast {
+  background: initial;
+  border: 0;
+}
+
+i {
+  font-size: 2em;
+  margin: 0.2em;
+}
+
+main {
+  display: inline-flex;
+  align-items: center;
 }
 
 .name {
@@ -97,7 +112,7 @@ input[type="submit"] {
 }
 
 .form .text-input {
-  width: 28em;
+  width: 30em;
 }
 
 .form, .group {

@@ -3,9 +3,11 @@
 <head>
   <meta charset="utf-8">
   <link rel="stylesheet" href="css/style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.37/vue.global.prod.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.6/dayjs.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
+  <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.3.0/css/all.css">
   <title>MQTT Over WebSocket</title>
 </head>
 <body>
@@ -31,10 +33,16 @@
           </div>
         </div>
         <form @submit.prevent="onSubmit" class="form">
-          <dig></dig>
-          <input type="text" ref="input" v-model="input" class="text-input">
-          <input type="submit" value="Send">
-          <button @click.prevent="onCopyLink" :title="clientId" class="btn-link">Copy<br>URL</button>
+          <main>
+            <i class="fa-regular fa-pen-nib fa-rotate-270"></i>
+            <input type="text" ref="input" v-model="input" class="text-input">
+            <button type="submit" class="fast" :disabled="!input.length" title="🚀">
+              <i class="fa-regular fa-paper-plane"></i>
+            </button>
+          </main>
+          <button @click.prevent="onCopyLink" class="fast" title="Copy to Clipboard">
+            <i class="fa-regular fa-clone"></i>
+          </button>
         </form>
       </div>
     </section>
