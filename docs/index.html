@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.5" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MQTT Over WebSocket</title>
   <link rel="stylesheet" href="css/style.css" />
   <script defer="" src="https://cdn.jsdelivr.net/npm/vue"></script>
@@ -14,37 +14,33 @@
   <div id="app">
     <article class="area-background quiet-2" role="img"></article>
     <section>
-      <div class="content">
-        <div class="group">
-          <div>ClientId: {{ clientId }}</div>
-          <label>
-            Name:
-            <input v-model="name" class="name">
-          </label>
-          <button class="btn-link" @click="onCreateRoom">Create a new Room</button>
-          <div>{{ ts }}</div>
-        </div>
-        <div ref="timeline" class="chat-area">
-          <div v-for="chat of chats" :class="chat.userId === userId ? 'with-me' : 'with-you'">
-            <div :title="chat.clientId">{{ username(chat) }} &nbsp; {{ timestamp(chat.time) }}</div>
-            <div class="chat-text" v-html="chat.message"></div>
-            <br v-if="chat.dialog">
-            <div v-for="item of chat.dialog" class="selection" @click="onSpeak(item)">{{ item.value || item.speak }}</div>
-          </div>
-        </div>
-        <form @submit.prevent="onSubmit" class="form">
-          <main>
-            <i class="fa-regular fa-pen-nib fa-rotate-270"></i>
-            <input type="text" ref="input" v-model="input" class="text-input">
-            <button type="submit" class="fast" :disabled="!input.length" title="🚀">
-              <i class="fa-regular fa-paper-plane"></i>
-            </button>
-          </main>
-          <button @click.prevent="onCopyLink" class="fast" title="Copy to Clipboard">
-            <i class="fa-regular fa-clone"></i>
-          </button>
-        </form>
+      <div class="group">
+        <div>ClientId: {{ clientId }}</div>
+        <label>
+          Name:
+          <input v-model="name" class="name">
+        </label>
+        <button class="btn-link" @click="onCreateRoom">Create a new Room</button>
+        <div>{{ ts }}</div>
+        <button @click.prevent="onCopyLink" class="fast" title="Copy to Clipboard">
+          <i class="fa-regular fa-clone"></i>
+        </button>
       </div>
+      <main ref="timeline" class="chat-area">
+        <div v-for="chat of chats" :class="chat.userId === userId ? 'with-me' : 'with-you'">
+          <div :title="chat.clientId">{{ username(chat) }} &nbsp; {{ timestamp(chat.time) }}</div>
+          <div class="chat-text" v-html="chat.message"></div>
+          <br v-if="chat.dialog">
+          <div v-for="item of chat.dialog" class="selection" @click="onSpeak(item)">{{ item.value || item.speak }}</div>
+        </div>
+      </main>
+      <form @submit.prevent="onSubmit" class="form main">
+        <i class="fa-regular fa-pen-nib fa-rotate-270"></i>
+        <input type="text" ref="input" v-model="input" class="text-input">
+        <button type="submit" class="fast" :disabled="!input.length" title="🚀">
+          <i class="fa-regular fa-paper-plane"></i>
+        </button>
+      </form>
     </section>
     <div ref="full-screen" class="full-screen">{{ message }}</div>
     <footer style="text-align:right;margin:0.5em;"><a href="https://jsx.jp" target="_blank">powered by jsx.jp</a></footer>
