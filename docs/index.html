@@ -13,18 +13,19 @@
 <body>
   <div id="app">
     <article class="area-background quiet-2" role="img"></article>
-    <section>
+    <section class="c-main">
       <div class="group">
-        <div>ClientId: {{ clientId }}</div>
-        <label>
-          Name:
-          <input v-model="name" class="name">
-        </label>
+        <div class="c-client">
+          <div><span class="c-hide">ClientId: </span>{{ clientId }}</div>
+          <label>
+            <span class="c-hide">Name: </span><input v-model="name" class="name">
+          </label>
+        </div>
         <button class="btn-link" @click="onCreateRoom">Create a new Room</button>
-        <div>{{ ts }}</div>
         <button @click.prevent="onCopyLink" class="fast" title="Copy to Clipboard">
           <i class="fa-regular fa-clone"></i>
         </button>
+        <div class="c-hide">{{ ts }}</div>
       </div>
       <main ref="timeline" class="chat-area">
         <div v-for="chat of chats" :class="chat.userId === userId ? 'with-me' : 'with-you'">

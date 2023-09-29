@@ -4,15 +4,22 @@
 }
 @media screen and (max-width: 640px) {
   :root {
-    --font-size: 3.2vmin;
+    --font-size: 3.8vmin;
   }
 }
 
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 * {
   font-size: var(--font-size);
 }
 
-html, body, #app {
+body, #app {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -23,13 +30,60 @@ h1 {
   font-size: 2em;
 }
 
+section.c-main {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+}
+
+.group {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.group > * {
+  margin: 0.2em 0.5em;
+}
+
+.c-client {
+  display: inline-block;
+}
+
+@media (max-width: 640px) {
+  .c-hide {
+    display: none;
+  }
+}
+
 .chat-area {
   font-size: 1.6vmin;
   padding: 1em;
-  width: 92vmin;
-  height: 80vmin;
+  width: 92%;
+  height: 100%;
+  margin: auto;
   border: 1px solid #333;
   overflow-y: scroll;
+}
+
+.form {
+  padding: 0.5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form input {
+  font-size: 1.5em;
+  border: 1px solid #888;
+}
+
+.form .text-input {
+  width: 100%;
+  margin: 0 0.5em;
 }
 
 .with-me {
@@ -95,35 +149,6 @@ i {
 
 .name {
   width: 8em;
-}
-
-.form input {
-  font-size: 1.5em;
-  border: 1px solid #888;
-}
-
-.form .text-input {
-  width: auto;
-  margin: 0 0.5em;
-}
-
-.form {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 0.5em;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.group {
-  width: 100%;
-  padding: 0.5em;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
 }
 
 .btn-link {
