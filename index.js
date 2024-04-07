@@ -12,9 +12,16 @@ const mqttDescribe = () => {
     client.subscribe(topicSubscribe, e => {
       if (e) {
         logger.error('Subscription failed:', e);
-      } else {
-        logger.info('Subscribed to topic:', topicSubscribe);
+        return;
       }
+      logger.info('Subscribed to topic:', topicSubscribe);
+      const response = {
+        message: 'hello connected',
+        time: new Date().toISOString(),
+        userId: 'Broker Server',
+        name: 'Broker Server',
+      };
+      client.publish('broadcast', JSON.stringify(response));
     });
   });
   client.on('message', (topic, message) => {
@@ -36,10 +43,8 @@ const main = async () => {
   server.on('upgrade', (req, socket, head) => {
     const headers = new Headers(req.headers);
     if (req.url.startsWith('/mqtt')) {
-      socket.on('message', message => {
-        const upgrade = headers.get('upgrade');
-        logger.info({ url: req.url, upgrade, message });
-      });
+      const upgrade = headers.get('upgrade');
+      logger.info({ url: req.url, upgrade });
       proxy.ws(req, socket, head, { target: 'ws://127.0.0.1:12470' });
     } else {
       socket.destroy();
