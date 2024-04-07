@@ -88,7 +88,9 @@ class App {
     this.usePublic();
     this.useLogging();
     app.use('/mqtt', (req, res) => {
-      proxy.web(req, res, { target: 'http://127.0.0.1:12470' });
+      const headers = new Headers(req.headers);
+      logger.info({ upgrade: headers.get('upgrade') });
+      proxy.ws(req, res, { target: 'http://127.0.0.1:12470' });
     });
     this.notfoundHandler();
     this.errorHandler();
