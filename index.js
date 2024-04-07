@@ -4,7 +4,7 @@ const httpProxy = require('http-proxy');
 const mqtt = require('mqtt');
 const { App } = require('./app');
 
-const mqttDescribe = () => {
+const mqttSubscribe = () => {
   const topicSubscribe = '#';
   const client = mqtt.connect('mqtt://127.0.0.1:1883');
   client.on('connect', () => {
@@ -14,9 +14,8 @@ const mqttDescribe = () => {
         logger.error('Subscription failed:', e);
         return;
       }
-      logger.info('Subscribed to topic:', topicSubscribe);
       const response = {
-        message: 'hello connected',
+        message: `Subscribed to topic '${topicSubscribe}'`,
         time: new Date().toISOString(),
         userId: 'Broker Server',
         name: 'Broker Server',
@@ -34,7 +33,7 @@ const mqttDescribe = () => {
 };
 
 const main = async () => {
-  mqttDescribe();
+  mqttSubscribe();
   const prom = {};
   prom.pending = new Promise(resolve => { prom.resolve = resolve; });
   const app = new App().start();
