@@ -1,4 +1,6 @@
-const broker = 'wss://mqtt.jsx.jp/mqtt';
+const broker = window.location.host.match('.cdn.')
+  ? 'wss://mqtt.jsx.jp/mqtt'
+  : `wss://${window.location.host}/mqtt`;
 const client = mqtt.connect(broker);
 
 Vue.createApp({

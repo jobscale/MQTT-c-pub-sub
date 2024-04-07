@@ -2,9 +2,11 @@ const os = require('os');
 const path = require('path');
 const createHttpError = require('http-errors');
 const express = require('express');
+const httpProxy = require('http-proxy');
 const { logger } = require('@jobscale/logger');
 
 const app = express();
+const proxy = httpProxy.createProxyServer();
 
 class App {
   useParser() {
@@ -35,7 +37,7 @@ class App {
     app.use((req, res, next) => {
       const ts = new Date().toLocaleString();
       const progress = () => {
-        const remoteIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        const remoteIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
         const { protocol, method, url } = req;
         const headers = JSON.stringify(req.headers);
         logger.info({
@@ -56,11 +58,10 @@ class App {
 
   notfoundHandler() {
     app.use((req, res) => {
-      const template = 'error/default';
       if (req.method === 'GET') {
         const e = createHttpError(404);
         res.locals.e = e;
-        res.status(e.status).render(template);
+        res.status(e.status).send(JSON.stringify(res.locals));
         return;
       }
       const e = createHttpError(501);
@@ -71,11 +72,10 @@ class App {
   errorHandler() {
     app.use((e, req, res, done) => {
       (never => never)(done);
-      const template = 'error/default';
       if (!e.status) e.status = 503;
       if (req.method === 'GET') {
         res.locals.e = e;
-        res.status(e.status).render(template);
+        res.status(e.status).send(JSON.stringify(res.locals));
         return;
       }
       res.status(e.status).json({ message: e.message });
@@ -87,6 +87,9 @@ class App {
     this.useHeader();
     this.usePublic();
     this.useLogging();
+    app.use('/mqtt', (req, res) => {
+      proxy.web(req, res, { target: 'http://127.0.0.1:12470' });
+    });
     this.notfoundHandler();
     this.errorHandler();
     return app;
