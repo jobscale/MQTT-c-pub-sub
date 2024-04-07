@@ -7,10 +7,22 @@ const { App } = require('./app');
 const mqttDescribe = () => {
   const topicSubscribe = '#';
   const client = mqtt.connect('mqtt://127.0.0.1:1883');
-  client.subscribe(topicSubscribe);
+  client.on('connect', () => {
+    logger.info('Connected to MQTT broker');
+    client.subscribe(topicSubscribe, e => {
+      if (e) {
+        logger.error('Subscription failed:', e);
+      } else {
+        logger.info('Subscribed to topic:', topicSubscribe);
+      }
+    });
+  });
   client.on('message', (topic, message) => {
     const payload = message.toString();
     logger.info({ payload, topic });
+  });
+  client.on('error', e => {
+    logger.error('MQTT client error:', e);
   });
 };
 
@@ -23,8 +35,11 @@ const main = async () => {
   const proxy = httpProxy.createProxyServer();
   server.on('upgrade', (req, socket, head) => {
     const headers = new Headers(req.headers);
-    logger.info({ url: req.url, upgrade: headers.get('upgrade') });
     if (req.url.startsWith('/mqtt')) {
+      socket.on('message', message => {
+        const upgrade = headers.get('upgrade');
+        logger.info({ url: req.url, upgrade, message });
+      });
       proxy.ws(req, socket, head, { target: 'ws://127.0.0.1:12470' });
     } else {
       socket.destroy();
