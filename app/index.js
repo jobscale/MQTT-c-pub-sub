@@ -1,11 +1,13 @@
 const os = require('os');
 const path = require('path');
+const http = require('http');
 const createHttpError = require('http-errors');
 const express = require('express');
 const httpProxy = require('http-proxy');
 const { logger } = require('@jobscale/logger');
 
 const app = express();
+const server = http.createServer(app);
 const proxy = httpProxy.createProxyServer();
 
 class App {
@@ -61,7 +63,8 @@ class App {
       if (req.method === 'GET') {
         const e = createHttpError(404);
         res.locals.e = e;
-        res.status(e.status).send(JSON.stringify(res.locals));
+        logger.info({ locals: JSON.stringify(res.locals) });
+        res.status(e.status).send(e.message);
         return;
       }
       const e = createHttpError(501);
@@ -75,7 +78,8 @@ class App {
       if (!e.status) e.status = 503;
       if (req.method === 'GET') {
         res.locals.e = e;
-        res.status(e.status).send(JSON.stringify(res.locals));
+        logger.info({ locals: JSON.stringify(res.locals) });
+        res.status(e.status).send(e.message);
         return;
       }
       res.status(e.status).json({ message: e.message });

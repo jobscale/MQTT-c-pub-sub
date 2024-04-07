@@ -1,4 +1,5 @@
 const { logger } = require('@jobscale/logger');
+const http = require('http');
 const mqtt = require('mqtt');
 const { App } = require('./app');
 
@@ -17,11 +18,12 @@ const main = async () => {
   const prom = {};
   prom.pending = new Promise(resolve => { prom.resolve = resolve; });
   const app = new App().start();
+  const server = http.createServer(app);
   const options = {
     host: '0.0.0.0',
     port: process.env.PORT || 3000,
   };
-  app.listen(options, () => {
+  server.listen(options, () => {
     logger.info(JSON.stringify({
       Server: 'Started',
       'Listen on': `http://127.0.0.1:${options.port}`,
