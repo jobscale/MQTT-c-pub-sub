@@ -20,6 +20,7 @@ COPY --chown=node:staff docker-entry.sh .
 COPY --chown=node:staff docs docs
 COPY --chown=node:staff app app
 COPY --chown=node:staff index.js .
+USER root
 EXPOSE 3000
 EXPOSE 1883
 EXPOSE 12470
