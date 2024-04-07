@@ -1,14 +1,10 @@
 const os = require('os');
 const path = require('path');
-const http = require('http');
 const createHttpError = require('http-errors');
 const express = require('express');
-const httpProxy = require('http-proxy');
 const { logger } = require('@jobscale/logger');
 
 const app = express();
-const server = http.createServer(app);
-const proxy = httpProxy.createProxyServer();
 
 class App {
   useParser() {
@@ -91,11 +87,6 @@ class App {
     this.useHeader();
     this.usePublic();
     this.useLogging();
-    app.use('/mqtt', (req, res) => {
-      const headers = new Headers(req.headers);
-      logger.info({ upgrade: headers.get('upgrade') });
-      proxy.ws(req, res, { target: 'ws://127.0.0.1:12470' });
-    });
     this.notfoundHandler();
     this.errorHandler();
     return app;
