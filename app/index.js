@@ -90,7 +90,7 @@ class App {
     app.use('/mqtt', (req, res) => {
       const headers = new Headers(req.headers);
       logger.info({ upgrade: headers.get('upgrade') });
-      proxy.ws(req, res, { target: 'http://127.0.0.1:12470' });
+      proxy.ws(req, res, { target: 'ws://127.0.0.1:12470' });
     });
     this.notfoundHandler();
     this.errorHandler();
