@@ -116,7 +116,7 @@ Vue.createApp({
     },
 
     timestamp(time) {
-      return dayjs(time).format('hh:mm:ss');
+      return dayjs(time).format('HH:mm:ss');
     },
 
     username(chat) {
