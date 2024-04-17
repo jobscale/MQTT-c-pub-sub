@@ -16,7 +16,7 @@ Vue.createApp({
     const userId = this.random();
     const name = sessionStorage.getItem('name') || 'anonymous';
     return {
-      ts: dayjs().format('YYYY-MM-DD hh:mm:ss'),
+      ts: dayjs().format('YYYY-MM-DD HH:mm:ss'),
       clientId,
       userId,
       name,
@@ -29,7 +29,7 @@ Vue.createApp({
 
   created() {
     this.subscribe();
-    const format = 'YYYY-MM-DD hh:mm:ss';
+    const format = 'YYYY-MM-DD HH:mm:ss';
     setInterval(() => { this.ts = dayjs().format(format); }, 1000);
   },
 
