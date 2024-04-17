@@ -53,7 +53,7 @@ Vue.createApp({
       const httpRegexG = /(https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*))/g;
       const plaintext = payload.message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
       const htmlText = plaintext.replace(httpRegexG, '<a target="_blank" href="$1">$1</a>');
-      const message = htmlText.replace(/\n/g, '<br>');
+      const message = htmlText.replace(/\\n/g, '<br>');
       this.chats.push({
         ...payload,
         message,
