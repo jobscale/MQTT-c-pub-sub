@@ -1,8 +1,9 @@
-const { logger } = require('@jobscale/logger');
 const http = require('http');
-const httpProxy = require('http-proxy');
 const mqtt = require('mqtt');
-const { App } = require('./app');
+const { logger } = require('@jobscale/logger');
+const { app, upgradeHandler, errorHandler } = require('./app');
+
+const PORT = process.env.PORT || 3000;
 
 const mqttSubscribe = () => {
   const topicSubscribe = '#';
@@ -34,33 +35,20 @@ const mqttSubscribe = () => {
 
 const main = async () => {
   mqttSubscribe();
-  const prom = {};
-  prom.pending = new Promise(resolve => { prom.resolve = resolve; });
-  const app = new App().start();
   const server = http.createServer(app);
-  const proxy = httpProxy.createProxyServer();
-  server.on('upgrade', (req, socket, head) => {
-    const headers = new Headers(req.headers);
-    if (req.url.startsWith('/mqtt')) {
-      const upgrade = headers.get('upgrade');
-      logger.info({ url: req.url, upgrade });
-      proxy.ws(req, socket, head, { target: 'ws://127.0.0.1:12470' });
-    } else {
-      socket.destroy();
-    }
-  });
+  server.on('upgrade', upgradeHandler);
+  server.on('error', errorHandler);
   const options = {
     host: '0.0.0.0',
-    port: process.env.PORT || 3000,
+    port: PORT,
   };
   server.listen(options, () => {
     logger.info(JSON.stringify({
       Server: 'Started',
       'Listen on': `http://127.0.0.1:${options.port}`,
     }, null, 2));
-    prom.resolve(app);
   });
-  return Promise.all([prom.pending]);
+  return app;
 };
 
 module.exports = {
