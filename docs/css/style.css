@@ -172,7 +172,6 @@ section {
   bottom: 0;
   left: 0;
   right: 0;
-
 }
 
 .full-screen {
@@ -203,24 +202,7 @@ section {
   background: #123;
 }
 
-@property --x {
-  syntax: '<percentage>';
-  inherits: true;
-  initial-value: 50%;
-}
-
-@keyframes flyUFO {
-  0% {
-    --x: -200%;
-  }
-  100% {
-    --x: 200%;
-  }
-}
-
 .quiet-2::before {
-  --x: 50%;
-  animation: flyUFO 5s linear infinite;
   content: "";
   position: absolute;
   left: 0;
