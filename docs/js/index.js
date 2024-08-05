@@ -116,6 +116,10 @@ Vue.createApp({
       if (delay) setTimeout(() => { style.display = 'none'; }, 1500);
     },
 
+    date(time) {
+      return dayjs(time).format('YYYY-MM-DD');
+    },
+
     timestamp(time) {
       return dayjs(time).format('HH:mm:ss');
     },
