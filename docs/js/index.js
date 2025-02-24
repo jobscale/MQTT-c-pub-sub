@@ -1,6 +1,7 @@
 const [protocol] = window.location.origin.split(':');
 const wss = { https: 'wss', http: 'ws' };
-const broker = window.location.host.match('.cdn.')
+const without = window.location.host.match('.cdn.') || window.location.host.match('127.0.0.1');
+const broker = without
   ? 'wss://mqtt.jsx.jp/mqtt'
   : `${wss[protocol]}://${window.location.host}/mqtt`;
 const client = mqtt.connect(broker);

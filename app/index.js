@@ -32,7 +32,10 @@ class App {
       path: path.join(process.cwd(), 'docs', pathname),
     };
     const stats = fs.statSync(file.path);
-    if (stats.isDirectory()) file.path += 'index.html';
+    if (stats.isDirectory()) {
+      if (!file.path.endsWith('/')) file.path += '/';
+      file.path += 'index.html';
+    }
     if (!fs.existsSync(file.path)) return false;
     const mime = filePath => {
       const ext = path.extname(filePath).toLowerCase();
@@ -59,7 +62,7 @@ class App {
     const ts = new Date().toISOString();
     const progress = () => {
       const headers = new Headers(req.headers);
-      const remoteIp = req.get('X-Forwarded-For') || req.socket.remoteAddress;
+      const remoteIp = headers.get('X-Forwarded-For') || req.socket.remoteAddress;
       const { method, url } = req;
       const protocol = req.socket.encrypted ? 'https' : 'http';
       const host = headers.get('host');

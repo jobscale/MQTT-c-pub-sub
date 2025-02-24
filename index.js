@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 
 const mqttSubscribe = () => {
   const topicSubscribe = '#';
-  const client = mqtt.connect('mqtt://127.0.0.1:1883');
+  const client = mqtt.connect('mqtt://n100.jsx.jp:1883');
   client.on('connect', () => {
     logger.info('Connected to MQTT broker');
     client.subscribe(topicSubscribe, e => {
