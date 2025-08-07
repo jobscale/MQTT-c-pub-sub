@@ -31,7 +31,7 @@
       <main ref="timeline" class="chat-area">
         <div v-for="chat of chats" :class="chat.userId === userId ? 'with-me' : 'with-you'">
           <div><span :title="chat.userId">{{ username(chat) }}</span>&nbsp;<span :title="date(chat.time)">{{ timestamp(chat.time) }}</span></div>
-          <div class="chat-text" v-html="chat.message"></div>
+          <div class="chat-text" v-html="chat.message.replace('\n', '<br>')"></div>
           <br v-if="chat.dialog">
           <div v-for="item of chat.dialog" class="selection" @click="onSpeak(item)">{{ item.value || item.speak }}</div>
         </div>

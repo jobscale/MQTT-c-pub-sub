@@ -6,7 +6,7 @@ const httpProxy = require('http-proxy');
 const { logger } = require('@jobscale/logger');
 
 const proxy = httpProxy.createProxyServer({ xfwd: true });
-const target = 'ws://127.0.0.1:12470';
+const target = 'ws://a.jsx.jp:12470';
 
 class App {
   useHeader(req, res) {

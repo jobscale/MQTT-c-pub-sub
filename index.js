@@ -2,12 +2,18 @@ const http = require('http');
 const mqtt = require('mqtt');
 const { logger } = require('@jobscale/logger');
 const { app, upgradeHandler, errorHandler } = require('./app');
+const { llm } = require('./app/llm');
 
 const PORT = process.env.PORT || 3000;
+const ENV = process.env.ENV || 'k8s';
+const broker = {
+  k8s: 'mqtt://n100.jsx.jp:1883',
+  local: 'mqtt://a.jsx.jp:1883',
+}[ENV];
 
 const mqttSubscribe = () => {
   const topicSubscribe = '#';
-  const client = mqtt.connect('mqtt://n100.jsx.jp:1883');
+  const client = mqtt.connect(broker);
   client.on('connect', () => {
     logger.info('Connected to MQTT broker');
     client.subscribe(topicSubscribe, e => {
@@ -15,18 +21,30 @@ const mqttSubscribe = () => {
         logger.error('Subscription failed:', e);
         return;
       }
-      const response = {
+      client.publish('broadcast', JSON.stringify({
         message: `Subscribed to topic '${topicSubscribe}'`,
         time: new Date().toISOString(),
         userId: 'Broker Server',
         name: 'Broker Server',
-      };
-      client.publish('broadcast', JSON.stringify(response));
+      }));
     });
   });
-  client.on('message', (topic, message) => {
+  client.on('message', async (topic, message) => {
     const payload = message.toString();
     logger.info({ payload, topic });
+    const item = JSON.parse(payload);
+    const [prefix] = topic.split('-');
+    if (prefix !== 'chat/ai') return;
+    if (item.userId === 'Broker Server') return;
+    if (item.userId === 'AI') return;
+    if (item.message.includes('joined')) return;
+    const res = await llm.fetch(item.message);
+    client.publish(topic, JSON.stringify({
+      message: `${res.message || 'no good'}\\ntime ${res.benchmark}`,
+      time: new Date().toISOString(),
+      userId: 'AI',
+      name: 'AI',
+    }));
   });
   client.on('error', e => {
     logger.error('MQTT client error:', e);
