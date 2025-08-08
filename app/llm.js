@@ -19,7 +19,7 @@ class LLM {
       model: server.model,
       messages: [{ role: 'user', content }],
       temperature: 0.4,
-      max_tokens: 64,
+      max_tokens: 1024,
     })
     .then(res => {
       const { content: message } = res.choices[0].message;
