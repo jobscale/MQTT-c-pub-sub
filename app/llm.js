@@ -1,3 +1,4 @@
+const { logger } = require('@jobscale/logger');
 const { servers } = require('./server');
 
 const server = servers['local-gemma-3'];
@@ -27,6 +28,10 @@ class LLM {
         model: server.model,
         benchmark: `${(Date.now() - start) / 1000}s`,
       };
+    })
+    .catch(e => {
+      logger.error(e);
+      return {};
     });
   }
 }
