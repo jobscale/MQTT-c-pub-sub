@@ -1,6 +1,6 @@
 FROM node:lts-bookworm
 USER root
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends sudo netcat-openbsd mosquitto mosquitto-clients \
  && apt-get clean && rm -fr /var/lib/apt/lists/*
 RUN usermod -aG sudo node && echo '%sudo ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/40-users
