@@ -2,17 +2,9 @@ import MarkdownIt from 'https://esm.sh/markdown-it@14';
 import DOMPurify from 'https://esm.sh/dompurify@3';
 import dayjs from 'https://esm.sh/dayjs@1.11.10';
 import { createApp } from 'https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.min.js';
-// import { createLogger } from 'https://esm.sh/@jobscale/logger'; // ロガーライブラリのインポートは一時的に削除
+import { createLogger } from 'https://esm.sh/@jobscale/logger';
 
-const logger = (std => {
-  const instant = {
-    debug: std.log,
-    info: std.log,
-    error: std.error,
-    warn: std.warn,
-  };
-  return instant;
-})(console);
+const logger = createLogger('debug', { timestamp: true });
 
 const [protocol] = window.location.origin.split(':');
 const wss = { https: 'wss', http: 'ws' };
