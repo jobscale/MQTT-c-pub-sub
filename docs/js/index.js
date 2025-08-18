@@ -1,3 +1,11 @@
+/* globals MarkdownIt, DOMPurify */
+// Ensure these CDN scripts are loaded in your HTML before this JS file:
+// <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+// <script src="https://cdn.jsdelivr.net/npm/markdown-it@14/dist/markdown-it.min.js"></script>
+// <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+// <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.10/dayjs.min.js"></script>
+// <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.1.0/paho-mqtt.min.js"></script>
+
 const [protocol] = window.location.origin.split(':');
 const wss = { https: 'wss', http: 'ws' };
 const without = window.location.host.match('.cdn.') || window.location.host.match('127.0.0.1');
@@ -51,10 +59,37 @@ Vue.createApp({
 
     onMessage(topic, data) {
       const payload = JSON.parse(data.toString());
-      const httpRegexG = /(https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_+.~#?&/=]*))/g;
-      const plaintext = payload.message.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      const htmlText = plaintext.replace(httpRegexG, '<a target="_blank" href="$1">$1</a>');
-      const message = htmlText.replace(/\n/g, '<br>');
+      // Initialize markdown-it with auto-linking and breaks enabled
+      const md = new MarkdownIt({
+        linkify: true, // Auto-converts URLs to links
+        breaks: true, // Converts newlines to <br> tags
+      });
+      const renderToken = (tokens, idx, options, env, self) => self
+      .renderToken(tokens, idx, options);
+      // Keep a reference to the default link renderer
+      const defaultRender = md.renderer.rules.link_open
+      || renderToken;
+
+      // Override the link_open rule to add target="_blank" and rel="noopener noreferrer"
+      md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
+        // Add target="_blank"
+        tokens[idx].attrPush(['target', '_blank']);
+        // Add rel="noopener noreferrer" for security when using target="_blank"
+        tokens[idx].attrPush(['rel', 'noopener noreferrer']);
+        // Call the original renderer to complete the HTML tag generation
+        return defaultRender(tokens, idx, options, env, self);
+      };
+
+      // Render the Markdown message to raw HTML
+      const rawHtml = md.render(payload.message);
+
+      // Sanitize the HTML using DOMPurify
+      // Ensure 'a' tag and 'href', 'target', 'rel' attributes are explicitly allowed
+      const message = DOMPurify.sanitize(rawHtml, {
+        ALLOWED_TAGS: ['a', 'p', 'br', 'strong', 'em', 'ul', 'ol', 'li', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote', 'code', 'pre', 'hr'],
+        ALLOWED_ATTR: ['href', 'target', 'rel'],
+      });
+
       this.chats.push({
         ...payload,
         message,
