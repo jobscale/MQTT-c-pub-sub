@@ -64,11 +64,10 @@ Vue.createApp({
         linkify: true, // Auto-converts URLs to links
         breaks: true, // Converts newlines to <br> tags
       });
-      const renderToken = (tokens, idx, options, env, self) => self
-      .renderToken(tokens, idx, options);
       // Keep a reference to the default link renderer
       const defaultRender = md.renderer.rules.link_open
-      || renderToken;
+      || ((tokens, idx, options, env, self) => self
+      .renderToken(tokens, idx, options));
 
       // Override the link_open rule to add target="_blank" and rel="noopener noreferrer"
       md.renderer.rules.link_open = (tokens, idx, options, env, self) => {
