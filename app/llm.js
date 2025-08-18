@@ -1,7 +1,7 @@
 const { logger } = require('@jobscale/logger');
 const { servers } = require('./server');
 
-const server = servers['local-gemma-3'];
+const server = servers['dark-gemma-3n-E4B-Q5'];
 
 class LLM {
   async llmFetch(payload) {

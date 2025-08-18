@@ -8,6 +8,10 @@ module.exports = {
     mqtt: 'readonly',
     dayjs: 'readonly',
   },
+  parserOptions: {
+    ecmaVersion: 2023,
+    sourceType: 'module',
+  },
   rules: {
     indent: ['error', 2, { MemberExpression: 0 }],
     'no-trailing-spaces': 'error',
@@ -16,5 +20,7 @@ module.exports = {
     'class-methods-use-this': 'off',
     'no-await-in-loop': 'off',
     'no-param-reassign': 'off',
+    'import/no-unresolved': 'off',
+    'import/extensions': 'off',
   },
 };

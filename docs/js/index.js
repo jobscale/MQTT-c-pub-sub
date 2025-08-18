@@ -1,10 +1,18 @@
-/* globals MarkdownIt, DOMPurify */
-// Ensure these CDN scripts are loaded in your HTML before this JS file:
-// <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
-// <script src="https://cdn.jsdelivr.net/npm/markdown-it@14/dist/markdown-it.min.js"></script>
-// <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
-// <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.10/dayjs.min.js"></script>
-// <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.1.0/paho-mqtt.min.js"></script>
+import MarkdownIt from 'https://esm.sh/markdown-it@14';
+import DOMPurify from 'https://esm.sh/dompurify@3';
+import dayjs from 'https://esm.sh/dayjs@1.11.10';
+import { createApp } from 'https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.min.js';
+// import { createLogger } from 'https://esm.sh/@jobscale/logger'; // ロガーライブラリのインポートは一時的に削除
+
+const logger = (std => {
+  const instant = {
+    debug: std.log,
+    info: std.log,
+    error: std.error,
+    warn: std.warn,
+  };
+  return instant;
+})(console);
 
 const [protocol] = window.location.origin.split(':');
 const wss = { https: 'wss', http: 'ws' };
@@ -12,9 +20,23 @@ const without = window.location.host.match('.cdn.') || window.location.host.matc
 const broker = without
   ? 'wss://mqtt.jsx.jp/mqtt'
   : `${wss[protocol]}://${window.location.host}/mqtt`;
+
 const client = mqtt.connect(broker);
 
-Vue.createApp({
+client.on('connect', () => {
+  logger.debug('MQTT Connected!');
+});
+client.on('error', (err) => {
+  logger.error('MQTT Connection Error:', err);
+});
+client.on('offline', () => {
+  logger.warn('MQTT Client went offline (reconnecting automatically).');
+});
+client.on('reconnect', () => {
+  logger.info('MQTT Client reconnecting...');
+});
+
+createApp({
   data() {
     const qs = new URLSearchParams(document.location.search);
     const room = qs.get('r');
@@ -61,13 +83,11 @@ Vue.createApp({
       const payload = JSON.parse(data.toString());
       // Initialize markdown-it with auto-linking and breaks enabled
       const md = new MarkdownIt({
-        linkify: true, // Auto-converts URLs to links
-        breaks: true, // Converts newlines to <br> tags
+        linkify: true, breaks: true,
       });
       // Keep a reference to the default link renderer
       const defaultRender = md.renderer.rules.link_open
-      || ((tokens, idx, options, env, self) => self
-      .renderToken(tokens, idx, options));
+      || ((tokens, idx, options, env, self) => self.renderToken(tokens, idx, options));
 
       // Override the link_open rule to add target="_blank" and rel="noopener noreferrer"
       md.renderer.rules.link_open = (tokens, idx, options, env, self) => {

@@ -4,11 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="css/style.css" />
-  <script defer="" src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+  <!-- <script defer="" src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+  <script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.10/dayjs.min.js"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/markdown-it@14/dist/markdown-it.min.js"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
-  <script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.10/dayjs.min.js"></script>
-  <!-- <script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.1.0/paho-mqtt.min.js"></script> -->
+  <script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.1.0/paho-mqtt.min.js"></script>
+   -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
   <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.3.0/css/all.css">
   <link rel="icon" href="favicon.png">
@@ -34,7 +35,7 @@
       <main ref="timeline" class="chat-area">
         <div v-for="chat of chats" :class="chat.userId === userId ? 'with-me' : 'with-you'">
           <div><span :title="chat.userId">{{ username(chat) }}</span>&nbsp;<span :title="date(chat.time)">{{ timestamp(chat.time) }}</span></div>
-          <div class="chat-text" v-html="chat.message.replace('\n', '<br>')"></div>
+          <div class="chat-text" v-html="chat.message"></div>
           <br v-if="chat.dialog">
           <div v-for="item of chat.dialog" class="selection" @click="onSpeak(item)">{{ item.value || item.speak }}</div>
         </div>
@@ -50,6 +51,6 @@
     <div ref="full-screen" class="full-screen">{{ message }}</div>
     <footer style="text-align:right;margin:0.5em;"><a href="https://jsx.jp" target="_blank">powered by jsx.jp</a></footer>
   </div>
-  <script defer src="js/index.js"></script><br>
+  <script defer type="module" src="js/index.js"></script><br>
 </body>
 </html>
