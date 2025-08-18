@@ -2,7 +2,7 @@ import MarkdownIt from 'https://esm.sh/markdown-it@14';
 import DOMPurify from 'https://esm.sh/dompurify@3';
 import dayjs from 'https://esm.sh/dayjs@1.11.10';
 import { createApp } from 'https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.min.js';
-import { createLogger } from 'https://esm.sh/@jobscale/logger';
+import { createLogger } from 'https://esm.sh/@jobscale/logger@0.8.4';
 
 const logger = createLogger('debug', { timestamp: true });
 
