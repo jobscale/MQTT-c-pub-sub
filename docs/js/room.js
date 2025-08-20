@@ -1,4 +1,9 @@
-Vue.createApp({
+import { createApp } from 'https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.min.js';
+import { createLogger } from 'https://esm.sh/@jobscale/logger@0.8.4';
+
+const logger = createLogger('debug', { timestamp: true });
+
+createApp({
   data() {
     return {
       clientId: '(Now Loading ...)',
@@ -7,6 +12,7 @@ Vue.createApp({
   },
 
   mounted() {
+    logger.debug('mounted');
     this.showScreen('', 1500);
     this.onNewRoom();
     this.$refs.input.focus();

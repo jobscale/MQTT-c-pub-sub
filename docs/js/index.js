@@ -51,12 +51,14 @@ createApp({
   },
 
   created() {
+    logger.debug('created');
     this.subscribe();
     const format = 'YYYY-MM-DD HH:mm:ss';
     setInterval(() => { this.ts = dayjs().format(format); }, 1000);
   },
 
   mounted() {
+    logger.debug('mounted');
     this.showScreen('Now Loading ...', 1500);
     this.publish({
       message: `${this.name} joined in room.`,
