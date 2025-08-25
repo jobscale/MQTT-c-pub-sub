@@ -1,5 +1,5 @@
 import { createApp } from 'https://cdn.jsdelivr.net/npm/vue@3/dist/vue.esm-browser.min.js';
-import { createLogger } from 'https://esm.sh/@jobscale/logger@0.8.4';
+import { createLogger } from 'https://esm.sh/@jobscale/logger';
 
 const logger = createLogger('debug', { timestamp: true });
 

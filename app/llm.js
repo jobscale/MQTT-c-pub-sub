@@ -1,9 +1,9 @@
-const { logger } = require('@jobscale/logger');
-const { servers } = require('./server');
+import { logger } from '@jobscale/logger';
+import { servers } from './server.js';
 
 const server = servers['dark-gemma-it'];
 
-class LLM {
+export class LLM {
   async llmFetch(payload) {
     const res = await fetch(server.endpoint, {
       method: 'POST',
@@ -36,7 +36,9 @@ class LLM {
   }
 }
 
-module.exports = {
+export const llm = new LLM();
+
+export default {
   LLM,
-  llm: new LLM(),
+  llm,
 };

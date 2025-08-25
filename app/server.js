@@ -1,4 +1,4 @@
-const servers = {
+export const servers = {
   prod: {
     endpoint: 'https://llama.x.jsx.jp/v1/chat/completions',
     model: 'Gemma-3n-E2B-it',
@@ -60,4 +60,4 @@ const servers = {
   },
 };
 
-module.exports = { servers };
+export default { servers };

@@ -1,14 +1,14 @@
-const os = require('os');
-const path = require('path');
-const fs = require('fs');
-const createHttpError = require('http-errors');
-const httpProxy = require('http-proxy');
-const { logger } = require('@jobscale/logger');
+import os from 'os';
+import path from 'path';
+import fs from 'fs';
+import createHttpError from 'http-errors';
+import httpProxy from 'http-proxy';
+import { logger } from '@jobscale/logger';
 
 const proxy = httpProxy.createProxyServer({ xfwd: true });
 const target = 'ws://a.jsx.jp:12470';
 
-class App {
+class Ingress {
   useHeader(req, res) {
     const headers = new Headers(req.headers);
     const protocol = req.socket.encrypted ? 'https' : 'http';
@@ -142,6 +142,8 @@ class App {
   }
 }
 
-const app = new App();
-app.app = app.start();
-module.exports = app;
+const ingress = new Ingress();
+export const app = ingress.start();
+const { upgradeHandler, errorHandler } = ingress;
+export { upgradeHandler, errorHandler };
+export default app;

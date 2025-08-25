@@ -1,8 +1,8 @@
-const http = require('http');
-const mqtt = require('mqtt');
-const { logger } = require('@jobscale/logger');
-const { app, upgradeHandler, errorHandler } = require('./app');
-const { llm } = require('./app/llm');
+import http from 'http';
+import mqtt from 'mqtt';
+import { logger } from '@jobscale/logger';
+import { app, upgradeHandler, errorHandler } from './app/index.js';
+import { llm } from './app/llm.js';
 
 const PORT = process.env.PORT || 3000;
 const ENV = process.env.ENV || 'k8s';
@@ -69,6 +69,6 @@ const main = async () => {
   return app;
 };
 
-module.exports = {
+export default {
   server: main(),
 };
