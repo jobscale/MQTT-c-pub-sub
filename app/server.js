@@ -8,6 +8,10 @@ const servers = {
     model: 'Gemma-3n-E2B-it',
   },
 
+  'n100-gemma-it': {
+    endpoint: 'http://n100.jsx.jp:2880/v1/chat/completions',
+    model: 'Gemma-it',
+  },
   'n100-gemma-3n-E2B-Q5': {
     endpoint: 'http://n100.jsx.jp:2880/v1/chat/completions',
     model: 'Gemma-3n-E2B-it',
@@ -25,6 +29,10 @@ const servers = {
     model: 'Gemma-3n-E4B-it',
   },
 
+  'dark-gemma-it': {
+    endpoint: 'http://172.16.6.77:2880/v1/chat/completions',
+    model: 'Gemma-it',
+  },
   'dark-gemma-3n-E2B-Q5': {
     endpoint: 'http://172.16.6.77:2880/v1/chat/completions',
     model: 'Gemma-3n-E2B-it',
