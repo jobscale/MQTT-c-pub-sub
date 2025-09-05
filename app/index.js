@@ -4,6 +4,7 @@ import fs from 'fs';
 import createHttpError from 'http-errors';
 import httpProxy from 'http-proxy';
 import { logger } from '@jobscale/logger';
+import { router, Router } from './router.js';
 
 const proxy = httpProxy.createProxyServer({ xfwd: true });
 const target = 'ws://a.jsx.jp:12470';
@@ -31,12 +32,12 @@ class Ingress {
     const file = {
       path: path.join(process.cwd(), 'docs', pathname),
     };
+    if (!fs.existsSync(file.path)) return false;
     const stats = fs.statSync(file.path);
     if (stats.isDirectory()) {
       if (!file.path.endsWith('/')) file.path += '/';
       file.path += 'index.html';
     }
-    if (!fs.existsSync(file.path)) return false;
     const mime = filePath => {
       const ext = path.extname(filePath).toLowerCase();
       if (['.png', '.jpeg', '.webp', '.gif'].includes(ext)) return `image/${ext}`;
@@ -87,12 +88,14 @@ class Ingress {
   router(req, res) {
     const headers = new Headers(req.headers);
     const method = req.method.toUpperCase();
-    const { url } = req;
     const protocol = req.socket.encrypted ? 'https' : 'http';
     const host = headers.get('host');
-    const { pathname, searchParams } = new URL(`${protocol}://${host}${url}`);
+    const { pathname, searchParams } = new URL(`${protocol}://${host}${req.url}`);
     const route = `${method} ${pathname}`;
     logger.debug({ route, searchParams });
+
+    router.handle(req, res);
+    if (res.writableEnded) return;
 
     this.notfoundHandler(req, res);
   }
@@ -129,6 +132,17 @@ class Ingress {
   }
 
   start() {
+    router.add('POST', '/black/pink', (req, res) => {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ color: 'pink' }));
+    });
+    const sub = new Router();
+    sub.add('POST', '/green', (req, res) => {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ color: 'green' }));
+    });
+    router.use('/blue', sub);
+
     return (req, res) => {
       try {
         this.useHeader(req, res);
