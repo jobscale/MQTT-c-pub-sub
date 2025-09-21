@@ -4,7 +4,7 @@ import { logger } from '@jobscale/logger';
 import { app, upgradeHandler, errorHandler } from './app/index.js';
 import { llm } from './app/llm.js';
 
-const PORT = process.env.PORT || 3000;
+const PORT = Number.parseInt(process.env.PORT || 3000, 10);
 const ENV = process.env.ENV || 'k8s';
 const broker = {
   k8s: 'mqtt://n100.jsx.jp:1883',

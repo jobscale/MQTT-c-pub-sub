@@ -1,6 +1,7 @@
 import os from 'os';
 import path from 'path';
 import fs from 'fs';
+import mime from 'mime';
 import createHttpError from 'http-errors';
 import httpProxy from 'http-proxy';
 import { logger } from '@jobscale/logger';
@@ -24,37 +25,40 @@ class Ingress {
   }
 
   usePublic(req, res) {
+    if (!['GET', 'HEAD'].includes(req.method)) return false;
     const headers = new Headers(req.headers);
     const { url } = req;
     const protocol = req.socket.encrypted ? 'https' : 'http';
     const host = headers.get('host');
     const { pathname } = new URL(`${protocol}://${host}${url}`);
+    const baseDir = path.join(process.cwd(), 'docs');
     const file = {
-      path: path.join(process.cwd(), 'docs', pathname),
+      path: path.join(baseDir, pathname),
     };
-    if (!fs.existsSync(file.path)) return false;
-    const stats = fs.statSync(file.path);
-    if (stats.isDirectory()) {
-      if (!file.path.endsWith('/')) file.path += '/';
+    if (!file.path.startsWith(baseDir)) return false;
+    file.stat = fs.existsSync(file.path) && fs.statSync(file.path);
+    if (!file.stat) return false;
+    if (file.stat.isDirectory()) {
+      if (!file.path.endsWith('/')) {
+        res.writeHead(307, { Location: `${url}/` });
+        res.end();
+        return true;
+      }
       file.path += 'index.html';
+      file.stat = fs.existsSync(file.path) && fs.statSync(file.path);
+      if (!file.stat) return false;
     }
-    const mime = filePath => {
-      const ext = path.extname(filePath).toLowerCase();
-      if (['.png', '.jpeg', '.webp', '.gif'].includes(ext)) return `image/${ext}`;
-      if (['.jpg'].includes(ext)) return 'image/jpeg';
-      if (['.ico'].includes(ext)) return 'image/x-ico';
-      if (['.json'].includes(ext)) return 'application/json';
-      if (['.pdf'].includes(ext)) return 'application/pdf';
-      if (['.zip'].includes(ext)) return 'application/zip';
-      if (['.xml'].includes(ext)) return 'application/xml';
-      if (['.html', '.svg'].includes(ext)) return 'text/html';
-      if (['.js'].includes(ext)) return 'text/javascript';
-      if (['.css'].includes(ext)) return 'text/css';
-      if (['.txt', '.md'].includes(ext)) return 'text/plain';
-      return 'application/octet-stream';
-    };
+    const contentType = mime.getType(file.path) || 'application/octet-stream';
+    const contentLength = file.stat.size;
     const stream = fs.createReadStream(file.path);
-    res.writeHead(200, { 'Content-Type': mime(file.path) });
+    res.writeHead(200, {
+      'Content-Type': contentType,
+      'Content-Length': contentLength,
+    });
+    if (req.method === 'HEAD') {
+      res.end();
+      return true;
+    }
     stream.pipe(res);
     return true;
   }
@@ -63,7 +67,8 @@ class Ingress {
     const ts = new Date().toISOString();
     const progress = () => {
       const headers = new Headers(req.headers);
-      const remoteIp = headers.get('X-Forwarded-For') || req.socket.remoteAddress;
+      const ip = req.socket.remoteAddress || req.ip;
+      const remoteIp = headers.get('X-Real-Ip') || headers.get('X-Forwarded-For') || ip;
       const { method, url } = req;
       const protocol = req.socket.encrypted ? 'https' : 'http';
       const host = headers.get('host');
@@ -85,7 +90,7 @@ class Ingress {
     });
   }
 
-  router(req, res) {
+  useRoute(req, res) {
     const headers = new Headers(req.headers);
     const method = req.method.toUpperCase();
     const protocol = req.socket.encrypted ? 'https' : 'http';
@@ -126,9 +131,15 @@ class Ingress {
   errorHandler(e, req, res) {
     logger.error(e);
     if (!res) return;
+    if (req.method === 'GET') {
+      e = createHttpError(503);
+      res.writeHead(e.status, { 'Content-Type': 'text/plain' });
+      res.end(e.message);
+      return;
+    }
     if (!e.status) e = createHttpError(500);
-    res.writeHead(e.status, { 'Content-Type': 'text/plain' });
-    res.end(e.message);
+    res.writeHead(e.status, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ message: e.message }));
   }
 
   start() {
@@ -148,7 +159,7 @@ class Ingress {
         this.useHeader(req, res);
         if (this.usePublic(req, res)) return;
         this.useLogging(req, res);
-        this.router(req, res);
+        this.useRoute(req, res);
       } catch (e) {
         this.errorHandler(e, req, res);
       }
