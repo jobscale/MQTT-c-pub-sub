@@ -5,22 +5,26 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "start": "node .",
-    "lint": "eslint .",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint",
+    "test": "npm run lint"
   },
+  "pre-commit": ["test"],
   "dependencies": {
     "@jobscale/logger": "^0.8.4",
-    "http-errors": "^2.0.0",
+    "http-errors": "^2.0.1",
     "http-proxy": "^1.18.1",
     "mime": "^4.1.0",
-    "mqtt": "^5.14.0"
+    "mqtt": "^5.14.1"
   },
   "devDependencies": {
-    "eslint": "^8.57.1",
+    "@jobscale/eslint-plugin-standard": "^0.0.2",
+    "eslint": "^9.39.1",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.32.0"
+    "eslint-plugin-jest": "^29.2.0",
+    "pre-commit": "^1.2.2"
   }
 }
