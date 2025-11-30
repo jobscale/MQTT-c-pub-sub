@@ -1,6 +1,6 @@
 {
   "name": "mqtt-websocket",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "MQTT backend server",
   "keywords": [],
   "author": "",
@@ -8,7 +8,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "node .",
+    "start": "node index.js",
     "lint": "eslint",
     "test": "npm run lint"
   },
@@ -23,7 +23,7 @@
     "mqtt": "^5.14.1"
   },
   "devDependencies": {
-    "@jobscale/eslint-plugin-standard": "^0.0.3",
+    "@jobscale/eslint-plugin-standard": "^0.0.8",
     "eslint": "^9.39.1",
     "eslint-plugin-jest": "^29.2.1",
     "pre-commit": "^1.2.2"
