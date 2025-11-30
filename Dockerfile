@@ -1,4 +1,4 @@
-FROM node:lts-bookworm
+FROM node:lts-tixie
 USER root
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends sudo netcat-openbsd mosquitto mosquitto-clients \

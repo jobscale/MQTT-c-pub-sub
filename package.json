@@ -1,6 +1,6 @@
 {
   "name": "mqtt-websocket",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "MQTT backend server",
   "keywords": [],
   "author": "",
