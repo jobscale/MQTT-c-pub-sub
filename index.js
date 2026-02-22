@@ -40,7 +40,7 @@ const mqttSubscribe = () => {
     if (item.message.includes('joined')) return;
     const res = await llm.fetch(item.message);
     client.publish(topic, JSON.stringify({
-      message: `${res.message || 'no good'}\nbenchmark ${res.benchmark ?? '0s'}`,
+      message: `${res.message || 'no good'}\nbenchmark ${res.benchmark}`,
       time: new Date().toISOString(),
       userId: 'AI',
       name: 'AI',

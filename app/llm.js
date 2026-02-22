@@ -31,7 +31,9 @@ export class LLM {
     })
     .catch(e => {
       logger.error(e);
-      return {};
+      return {
+        benchmark: `${(Date.now() - start) / 1000}s`,
+      };
     });
   }
 }
