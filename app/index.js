@@ -4,7 +4,7 @@ import fs from 'fs';
 import mime from 'mime';
 import createHttpError from 'http-errors';
 import httpProxy from 'http-proxy';
-import { logger } from '@jobscale/logger';
+import { logger } from '@jobscale/create-logger';
 import { router, Router } from './router.js';
 
 const proxy = httpProxy.createProxyServer({ xfwd: true });

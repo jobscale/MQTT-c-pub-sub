@@ -1,6 +1,6 @@
 {
   "name": "mqtt-websocket",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "MQTT backend server",
   "keywords": [],
   "author": "",
@@ -16,7 +16,7 @@
     "test"
   ],
   "dependencies": {
-    "@jobscale/logger": "^0.10.1",
+    "@jobscale/create-logger": "^1.0.1",
     "http-errors": "^2.0.1",
     "http-proxy": "^1.18.1",
     "mime": "^4.1.0",

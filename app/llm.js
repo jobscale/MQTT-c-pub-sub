@@ -1,4 +1,4 @@
-import { logger } from '@jobscale/logger';
+import { logger } from '@jobscale/create-logger';
 import { servers } from './server.js';
 
 const server = servers['dark-gemma-it'];
@@ -39,8 +39,4 @@ export class LLM {
 }
 
 export const llm = new LLM();
-
-export default {
-  LLM,
-  llm,
-};
+export default { LLM, llm };

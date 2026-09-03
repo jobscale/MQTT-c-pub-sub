@@ -1,6 +1,6 @@
 import http from 'http';
 import mqtt from 'mqtt';
-import { logger } from '@jobscale/logger';
+import { logger } from '@jobscale/create-logger';
 import { app, upgradeHandler, errorHandler } from './app/index.js';
 import { llm } from './app/llm.js';
 
@@ -62,8 +62,9 @@ const main = async () => {
   };
   server.listen(options, () => {
     logger.info(JSON.stringify({
-      Server: 'Started',
+      Server: `Started ${ENV} server`,
       'Listen on': `http://127.0.0.1:${options.port}`,
+      'MQTT broker': broker,
     }, null, 2));
   });
   return app;
