@@ -20,7 +20,7 @@
     "http-errors": "^2.0.1",
     "http-proxy": "^1.18.1",
     "mime": "^4.1.0",
-    "mqtt": "^5.14.1"
+    "mqtt": "^5.16.0"
   },
   "devDependencies": {
     "@jobscale/eslint-plugin-standard": "^0.0.11",

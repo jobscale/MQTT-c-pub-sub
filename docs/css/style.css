@@ -26,10 +26,23 @@ body, #app {
   height: 100%;
 }
 
+section {
+  display: inline-block;
+}
+
 h1 {
   font-size: 2em;
 }
 
+button {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin: 0.5em 0.8em;
+}
+svg {
+  width: 2em;
+}
 section.c-main {
   position: relative;
   height: 100%;
