@@ -15,6 +15,7 @@ createApp({
     logger.debug('mounted');
     this.showScreen('', 1500);
     this.onNewRoom();
+    document.body.style.visibility = '';
     this.$refs.input.focus();
   },
 

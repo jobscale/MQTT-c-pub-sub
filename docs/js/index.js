@@ -64,6 +64,7 @@ createApp({
     this.publish({
       message: `${this.name} joined in room.`,
     });
+    document.body.style.visibility = '';
     this.$refs.input.focus();
   },
 
